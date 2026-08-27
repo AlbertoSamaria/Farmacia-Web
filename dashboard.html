@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard - Farmácia Web</title><link rel="stylesheet" href="css/style.css"></head>
+<body><header><strong>Farmácia Web</strong><nav>
+<a href="dashboard.html">Dashboard</a><a href="produtos.html">Produtos</a><a href="vendas.html">Vendas</a><a href="compras.html">Compras</a><a href="clientes.html">Clientes</a><a href="fornecedores.html">Fornecedores</a><a href="stock.html">Stock</a><a href="caixa.html">Caixa</a><a href="faturas.html">Faturas</a><a href="relatorios.html">Relatórios</a><a href="utilizadores.html">Utilizadores</a><button onclick="logout()">Sair</button>
+</nav></header>
+<main><h1>Dashboard</h1><section class="cards">
+<div class="card"><span class="report-icon" aria-hidden="true">💊</span><span>Produtos</span><b id="totalProdutos">0</b></div>
+<div class="card"><span class="report-icon" aria-hidden="true">⚠️</span><span>Stock baixo</span><b id="stockBaixo">0</b></div>
+<div class="card"><span class="report-icon" aria-hidden="true">📅</span><span>Validade próxima</span><b id="validade">0</b></div>
+<div class="card"><span class="report-icon" aria-hidden="true">💳</span><span>Vendas hoje</span><b id="vendasHoje">0</b></div>
+<div class="card"><span class="report-icon" aria-hidden="true">📈</span><span>Receita hoje</span><b id="receitaHoje">0 Kz</b></div>
+<div class="card"><span class="report-icon" aria-hidden="true">💰</span><span>Caixa</span><b id="saldoCaixa">0 Kz</b></div>
+</section>
+<section class="panel"><h2>Resumo operacional</h2><p id="userInfo"></p><div id="alertas"></div></section>
+</main><script src="js/app.js"></script><script src="js/dashboard.js"></script></body></html>

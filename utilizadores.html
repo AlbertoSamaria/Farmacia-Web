@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="pt">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Utilizadores</title><link rel="stylesheet" href="css/style.css"></head>
+<body><header><strong>Farmácia Web</strong><nav><a href="dashboard.html">Dashboard</a><a href="utilizadores.html">Utilizadores</a><button type="button" onclick="logout()">Sair</button></nav></header>
+<main><div class="page-head"><div><h1>Utilizadores</h1><p>Gestão de acessos e perfis.</p></div></div>
+<section class="panel admin-only"><h2>Novo utilizador</h2><form id="userForm" class="form-grid"><label>Nome<input name="nome" required></label><label>Username<input name="username" required></label><label>Palavra-passe<input name="password" type="password" minlength="6" required></label><label>Perfil<select name="perfil"><option>Operador</option><option>Farmaceutico</option><option>Administrador</option></select></label><button type="submit">Adicionar utilizador</button></form><p id="userMessage" class="msg"></p></section>
+<section class="panel user-list-panel"><h2>Utilizadores existentes</h2><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Username</th><th>Perfil</th><th>Estado</th><th>Criado em</th></tr></thead><tbody id="usersTable"></tbody></table></div></section></main>
+<script src="js/app.js"></script><script src="js/utilizadores.js"></script></body></html>

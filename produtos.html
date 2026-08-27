@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos | Farmácia Web</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <strong>Farmácia Web</strong>
+    </div>
+
+    <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="produtos.html" class="active">Produtos</a>
+        <a href="vendas.html">Vendas</a>
+        <a href="stock.html">Stock</a>
+        <a href="compras.html">Compras</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="fornecedores.html">Fornecedores</a>
+        <a href="relatorios.html">Relatórios</a>
+        <button type="button" onclick="logout()">Sair</button>
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    <!-- CABEÇALHO -->
+
+    <section class="page-head">
+
+        <div>
+            <h1>Produtos / Medicamentos</h1>
+            <p class="page-description">
+                Gestão de medicamentos, preços, stock e validade.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            class="btn-primary"
+            onclick="novoProduto()">
+
+            + Novo produto
+
+        </button>
+
+    </section>
+
+
+    <!-- PESQUISA -->
+
+    <section class="panel search-panel">
+
+        <div class="search-box">
+
+            <span class="search-icon">🔎</span>
+
+            <input
+                type="search"
+                id="busca"
+                placeholder="Pesquisar por código, nome ou princípio ativo"
+                autocomplete="off">
+
+        </div>
+
+    </section>
+
+
+    <!-- TABELA -->
+
+    <section class="panel">
+
+        <div class="table-header">
+
+            <div>
+                <h2>Lista de produtos</h2>
+                <span class="table-subtitle">
+                    Produtos cadastrados na farmácia
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Código</th>
+                        <th>Produto</th>
+                        <th>Princípio ativo</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Stock</th>
+                        <th>Validade</th>
+                        <th>Ações</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="produtos">
+
+                    <tr>
+                        <td colspan="8" class="loading">
+                            Carregando produtos...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- MODAL -->
+
+<div
+    id="modal"
+    class="modal hidden"
+    aria-hidden="true">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="modalTitulo">
+                    Novo produto
+                </h2>
+
+                <p>
+                    Preencha os dados necessários.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="btn-close"
+                onclick="fechar()"
+                aria-label="Fechar">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="produtoForm">
+
+            <input
+                type="hidden"
+                id="id">
+
+
+            <!-- DADOS BÁSICOS -->
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+
+                    <div>
+                        <strong>Dados básicos</strong>
+
+                        <span>
+                            Informações principais do produto
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <label>
+                        Código
+                        <input
+                            type="text"
+                            id="codigo"
+                            maxlength="50"
+                            placeholder="Ex.: PAR001"
+                            required>
+                    </label>
+
+
+                    <label class="field-wide">
+                        Nome comercial
+                        <input
+                            type="text"
+                            id="nome"
+                            maxlength="160"
+                            placeholder="Ex.: Paracetamol 500mg"
+                            required>
+                    </label>
+
+
+                    <label>
+                        Princípio ativo
+                        <input
+                            type="text"
+                            id="principio_ativo"
+                            maxlength="160"
+                            placeholder="Ex.: Paracetamol">
+                    </label>
+
+
+                    <label>
+                        Categoria
+                        <select id="categoria">
+
+                            <option value="">
+                                Selecionar categoria
+                            </option>
+
+                            <option value="Analgésico">
+                                Analgésico
+                            </option>
+
+                            <option value="Antibiótico">
+                                Antibiótico
+                            </option>
+
+                            <option value="Anti-inflamatório">
+                                Anti-inflamatório
+                            </option>
+
+                            <option value="Vitaminas">
+                                Vitaminas
+                            </option>
+
+                            <option value="Antialérgico">
+                                Antialérgico
+                            </option>
+
+                            <option value="Outros">
+                                Outros
+                            </option>
+
+                        </select>
+                    </label>
+
+
+                    <label>
+                        Preço de venda
+                        <div class="input-money">
+
+                            <span>Kz</span>
+
+                            <input
+                                type="number"
+                                id="preco"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                                required>
+
+                        </div>
+                    </label>
+
+
+                    <label>
+                        Receita obrigatória
+
+                        <select id="receita_obrigatoria">
+
+                            <option value="0">
+                                Não
+                            </option>
+
+                            <option value="1">
+                                Sim
+                            </option>
+
+                        </select>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- STOCK E LOTE -->
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+
+                    <div>
+                        <strong>Stock / Lote</strong>
+
+                        <span>
+                            Controle de quantidade e validade
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <label>
+                        Stock mínimo
+
+                        <input
+                            type="number"
+                            id="stock_minimo"
+                            min="0"
+                            value="5"
+                            placeholder="5">
+
+                    </label>
+
+
+                    <label>
+                        Lote
+
+                        <input
+                            type="text"
+                            id="lote"
+                            maxlength="80"
+                            placeholder="Ex.: LOT2026A01">
+
+                    </label>
+
+
+                    <label>
+                        Data de validade
+
+                        <input
+                            type="date"
+                            id="validade_input">
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÕES -->
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="fechar()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Guardar produto
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/produtos.js"></script>
+
+</body>
+</html>

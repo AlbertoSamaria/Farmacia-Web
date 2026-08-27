@@ -1,0 +1,16 @@
+CREATE DATABASE IF NOT EXISTS farmacia_web CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE farmacia_web;
+CREATE TABLE utilizadores(id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(120) NOT NULL,username VARCHAR(60) UNIQUE NOT NULL,password VARCHAR(255) NOT NULL,perfil ENUM('Administrador','Farmaceutico','Operador') NOT NULL DEFAULT 'Operador',estado ENUM('Ativo','Inativo') NOT NULL DEFAULT 'Ativo',criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE produtos(id INT AUTO_INCREMENT PRIMARY KEY,codigo VARCHAR(50) UNIQUE NOT NULL,nome VARCHAR(160) NOT NULL,principio_ativo VARCHAR(160),categoria VARCHAR(100),preco_compra DECIMAL(14,2) DEFAULT 0,preco_venda DECIMAL(14,2) NOT NULL,stock INT NOT NULL DEFAULT 0,stock_minimo INT NOT NULL DEFAULT 5,validade DATE,lote VARCHAR(80),receita_obrigatoria TINYINT(1) DEFAULT 0,criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE clientes(id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(160) NOT NULL,telefone VARCHAR(40),email VARCHAR(120),nif VARCHAR(40),criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE fornecedores(id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(160) NOT NULL,telefone VARCHAR(40),email VARCHAR(120),nif VARCHAR(40),criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE vendas(id INT AUTO_INCREMENT PRIMARY KEY,numero VARCHAR(60) UNIQUE NOT NULL,cliente_id INT NULL,utilizador_id INT NULL,total DECIMAL(14,2) NOT NULL,pagamento ENUM('Dinheiro','TPA','Transferencia','Outro') DEFAULT 'Dinheiro',criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(cliente_id) REFERENCES clientes(id) ON DELETE SET NULL,FOREIGN KEY(utilizador_id) REFERENCES utilizadores(id) ON DELETE SET NULL);
+CREATE TABLE venda_itens(id INT AUTO_INCREMENT PRIMARY KEY,venda_id INT NOT NULL,produto_id INT NOT NULL,quantidade INT NOT NULL,preco_unitario DECIMAL(14,2) NOT NULL,FOREIGN KEY(venda_id) REFERENCES vendas(id) ON DELETE CASCADE,FOREIGN KEY(produto_id) REFERENCES produtos(id));
+CREATE TABLE compras(id INT AUTO_INCREMENT PRIMARY KEY,numero VARCHAR(60) UNIQUE NOT NULL,fornecedor_id INT NULL,total DECIMAL(14,2) DEFAULT 0,criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(fornecedor_id) REFERENCES fornecedores(id) ON DELETE SET NULL);
+CREATE TABLE compra_itens(id INT AUTO_INCREMENT PRIMARY KEY,compra_id INT NOT NULL,produto_id INT NOT NULL,quantidade INT NOT NULL,custo_unitario DECIMAL(14,2) NOT NULL,lote VARCHAR(80),validade DATE,FOREIGN KEY(compra_id) REFERENCES compras(id) ON DELETE CASCADE,FOREIGN KEY(produto_id) REFERENCES produtos(id));
+CREATE TABLE movimentos_caixa(id INT AUTO_INCREMENT PRIMARY KEY,tipo ENUM('Entrada','Saida') NOT NULL,descricao VARCHAR(255),valor DECIMAL(14,2) NOT NULL,venda_id INT NULL,criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(venda_id) REFERENCES vendas(id) ON DELETE SET NULL);
+INSERT INTO utilizadores(nome,username,password,perfil) VALUES('Administrador','admin','$2y$10$7EqJtq98hPqEX7fNZaFWoO5kW7W8pH8h4d1LxK8s9v0Qp2Yx5yG6K','Administrador');
+INSERT INTO produtos(codigo,nome,principio_ativo,categoria,preco_venda,stock,stock_minimo) VALUES
+('PAR001','Paracetamol 500mg','Paracetamol','Analgésico',150,100,10),
+('AMO001','Amoxicilina 500mg','Amoxicilina','Antibiótico',800,50,10),
+('VIT001','Vitamina C','Ácido ascórbico','Vitaminas',1200,30,5);
