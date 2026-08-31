@@ -25,7 +25,6 @@ Sistema web de gestão de farmácia para XAMPP + PHP 8 + MySQL/MariaDB.
 3. Aceda ao phpMyAdmin.
 4. Importe `database/farmacia.sql`.
 5. Abra `http://localhost/farmacia_web/`.
-6. Login inicial:
   
 
 ## Estrutura
