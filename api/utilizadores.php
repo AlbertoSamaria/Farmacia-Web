@@ -1,8 +1,13 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/middleware.php';
 
 header('Content-Type: application/json; charset=utf-8');
+
+try {
+	// Protege a rota
+	protegerRota();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $users = $pdo->query(
@@ -60,4 +65,12 @@ try {
 } catch (PDOException $error) {
     http_response_code(400);
     echo json_encode(['sucesso' => false, 'mensagem' => 'Username já existente ou dados inválidos']);
+}
+
+} catch (Throwable $e) {
+	http_response_code(500);
+	echo json_encode([
+		'sucesso' => false,
+		'mensagem' => 'Erro ao processar utilizador.'
+	], JSON_UNESCAPED_UNICODE);
 }

@@ -1,8 +1,13 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/middleware.php';
 
 header('Content-Type: application/json; charset=utf-8');
+
+try {
+	// Protege a rota
+	protegerRota();
 
 $reports = [
     'vendas' => $pdo->query(
@@ -44,3 +49,11 @@ $reports['ultimas_compras'] = $pdo->query(
 )->fetchAll();
 
 echo json_encode(['sucesso' => true, 'dados' => $reports]);
+
+} catch (Throwable $e) {
+	http_response_code(500);
+	echo json_encode([
+		'sucesso' => false,
+		'mensagem' => 'Erro ao carregar relatórios.'
+	], JSON_UNESCAPED_UNICODE);
+}

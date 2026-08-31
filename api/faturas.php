@@ -1,8 +1,13 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/middleware.php';
 
 header('Content-Type: application/json; charset=utf-8');
+
+try {
+	// Protege a rota
+	protegerRota();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     $statement = $pdo->prepare(
@@ -58,3 +63,11 @@ $statement = $pdo->query(
 $invoices = $statement->fetchAll();
 
 echo json_encode(['sucesso' => true, 'dados' => $invoices]);
+
+} catch (Throwable $e) {
+	http_response_code(500);
+	echo json_encode([
+		'sucesso' => false,
+		'mensagem' => 'Erro ao processar fatura.'
+	], JSON_UNESCAPED_UNICODE);
+}

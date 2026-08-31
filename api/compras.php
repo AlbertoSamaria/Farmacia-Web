@@ -1,8 +1,14 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/middleware.php';
 
 header('Content-Type: application/json; charset=utf-8');
+
+try {
+	// Protege a rota
+	protegerRota();
+	validarCSRF();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -83,4 +89,12 @@ try {
 
     http_response_code(400);
     echo json_encode(['sucesso' => false, 'mensagem' => $error->getMessage()]);
+}
+
+} catch (Throwable $e) {
+	http_response_code(500);
+	echo json_encode([
+		'sucesso' => false,
+		'mensagem' => 'Erro ao processar compra.'
+	], JSON_UNESCAPED_UNICODE);
 }
