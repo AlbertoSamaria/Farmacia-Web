@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/auth.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -128,11 +129,12 @@ try {
         $usuario['password']
     );
 
+    fazerLogin($usuario);
 
     echo json_encode([
         'sucesso' => true,
         'mensagem' => 'Login efetuado com sucesso.',
-        'usuario' => $usuario
+        'usuario' => retornarUsuarioJSON()
     ], JSON_UNESCAPED_UNICODE);
 
     exit;
